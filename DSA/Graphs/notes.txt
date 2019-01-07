@@ -1,0 +1,39 @@
+## Graphs
+
+Two representations: adjacency matrix and adjacency list
+
+- Adj matrix is very simple to use: each entry i,j represents a connection i->j, w/ the entry being the # connections
+  - For undirected graphs, the matrix is symmetric, so lots of space is wasted
+  - Downside: storage is expensive, O(V^2), and most graphs are sparse (relatively few edges compared to vertices)
+
+- Adj list is also pretty simple: take a list, where each entry at v is a list of edges connected to v.
+  - To check a connection between v and w, query w in adj[v]
+  - Note: for both cases, undirected graphs require you to update connections for both v and w.
+  - To print a graph, simply iterate through each vertex and their connections - O(V+E) (O(V) if sparse, O(V^2) if dense)
+  
+
+
+- DFS algorithm: 
+The idea is to go deep before wide. Some tree traversals (pre/post/in) are examples of DFS-esque algorithms:
+you visit leaves first. 
+
+This is a recursive implementation, using a visited dict to mark whether a vertex has been visited.
+
+visited = dict.fromkeys(vertices, 0) # maps all vertices to 0
+
+def DFS(G, v):
+    visited[v] = 1
+    for w in G.adj(v):
+        if not visited[w]:
+            DFS(G, w)
+            
+For an iterative solution, simply use a stack instead:
+
+def DFS(G, v):
+    stack = [v]
+    while len(stack) > 0:
+        v = stack.pop()
+        if not visited[v]:
+            visited[v] = 1
+            for w in G.adj(v):
+                stack.append(w)
