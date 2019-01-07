@@ -9,6 +9,7 @@
 #
 #
 
+
 def mergeLists(head1, head2):
     if not head1:
         return head2
