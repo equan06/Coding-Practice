@@ -13,7 +13,7 @@ Two representations: adjacency matrix and adjacency list
   
 
 
-- DFS algorithm: 
+## DFS algorithm 
 The idea is to go deep before wide. Some tree traversals (pre/post/in) are examples of DFS-esque algorithms:
 you visit leaves first. 
 
@@ -27,13 +27,39 @@ def DFS(G, v):
         if not visited[w]:
             DFS(G, w)
             
+Potential problems: stack overflow for deep graphs. Since DFS visits each vertex exactly once via edges, 
+runtime is O(V+E). Since we store the visited property in a list and accounting for the recursive stack, we use O(V) space.
+            
 For an iterative solution, simply use a stack instead:
 
 def DFS(G, v):
     stack = [v]
     while len(stack) > 0:
         v = stack.pop()
-        if not visited[v]:
-            visited[v] = 1
-            for w in G.adj(v):
+        visited[v] = 1
+        for w in G.adj(v): 
+            if not visited[w]: 
                 stack.append(w)
+                
+Here we're not limited by recursion depth, and we use an explicit stack. 
+
+#Important note#: the order of the recursive/iterative algorithms may not be the same (namely the order in which
+children are visited). This is because a recursive approach will visit children in an order (A,B,C), while the iterative
+approach will visit children in the reverse order (C,B,A), since we're pushing to the stack in order (A,B,C).
+
+
+## BFS algorithm
+BFS uses the opposite approach: go wide before deep. It's akin to a level-order traversal of a tree.
+
+def BFS(G, v):
+    queue = [v]
+    while len(queue) > 0:
+        v = queue.remove(0) # we remove from the front of the queue, and append to the end
+        visited[v] = 1 
+        for w in G.adj(v):
+            if not visited[w]: 
+                queue.append(w)
+                
+The implementation is basically an iterative DFS but using a queue. This allows us to visit levels one at a time.
+Again, runtime is O(V+E), since we visit each node exactly once. 
+        
