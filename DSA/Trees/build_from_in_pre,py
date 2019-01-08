@@ -1,0 +1,29 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+# the main issue is the .index(root.val), which is O(N) which can be improved to O(1) by storing index locations of each element in inorder
+# in a dict. then you have to do a bunch of index calculations to subset the arrays properly, which is a bit tedious. this brings overall
+# runtime from O(N^2) to O(N) (Worst case is you have a left or right leaning tree, in which you go from size N, to N-1, ..., 1)
+
+class Solution:
+    def buildTree(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        if len(preorder) == 0 or len(inorder) == 0:
+            return None
+        root = TreeNode(preorder.pop(0))
+        index = inorder.index(root.val) # can be more efficient, since this is O(N) lookup
+        
+        left_in, right_in = inorder[:index], inorder[index+1:]
+
+        left_pre, right_pre = preorder[:len(left_in)], preorder[len(left_in):]
+        root.left = self.buildTree(left_pre, left_in)
+        root.right = self.buildTree(right_pre, right_in)
+        return root
