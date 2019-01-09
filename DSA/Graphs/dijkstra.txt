@@ -1,0 +1,32 @@
+## Dijkstra's algorithm
+
+A fundamental problem is to take a directed graph, a start vertex, and a target vertex, and then find the shortest
+path from start to target. You can also generalize to find the shortest paths from start to every other vertex 
+(assuming they're connected).
+
+By definition this path should not contain cycles (else you just skip the cycle), and each vertex must have 1 parent vertex 
+(in the event of ties, you arbitrarily choose 1 parent, else you pick the parent yielding the shorter path). Thus, the shortest
+paths subgraph will actually be a tree, with the root node being the start.
+
+Dijkstra's algorithm yields the shortest paths tree:
+
+step 1) From start, add all vertices into a minPQ, initializing all distances to infinity. Distances are always the distance from
+start.
+
+step 2) while minPQ is not empty:
+        - pop the closest vertex
+        - update all distances in minPQ (decreasePriority), as well as a dist list
+        - record that the current vertex points to each connected vertex (in a prev list)
+        
+When the minPQ is empty, we go through the prev list to find the SPT.
+
+Note that we need a minPQ that can decrease its priority.
+
+Runtime is essentially dependent on the runtime of a minPQ.
+- We insert V times, so that's O(VlogV)
+- We deleteMin V times, so that's O(VlogV)
+- We updatePriority E times, so that's O(ElogV)
+Assuming E > V, we have O(ElogV).
+
+The proof of this algorithm relies on the invariant that for any visited vertex v, dist[v] is the shortest distance 
+from start to v, while dist[u] is the shortest known distance (or infinite if not yet encountered). Then you proceed by induction.
