@@ -1,0 +1,40 @@
+## HashTables
+
+Hash tables are designed to have fast lookup. Essentially, if you want to store k-v mappings of a bunch of objects, you 
+compute the hashCode() of each key (think of an integer), and then mod the size of the array to get an array index (bucket).
+There, you store a value or even a data structure (LinkedList/BST are common), allowing you to handle multiple objects 
+that have the same hashcode (a collision).
+
+Usually, a load factor is computed (# filled buckets/size of array). If this load factor gets too high, then you simply
+resize the array. 
+
+# On HashCode
+HashCodes should be chosen to produce an even distribution among buckets. A good hashCode will depend on the object at hand:
+it can be quite different for strings vs images.
+
+This can be as simple as taking mod the number of objects,
+or computing some bizarre integer representation (in Java, string hashcode is computed by 31*s[0]^0 + 31*s[1]^1 + ...).
+
+Note in the string hashcode, we use a prime (see https://computinglife.wordpress.com/2008/11/20/why-do-hash-functions-use-prime-numbers/ 
+for more) to ensure a nice hashcode distribution across buckets. 
+
+Note that hashCode should act as an equivalence relation: a == b <-> b == a
+
+And finally, make sure that the cost of computing a hashCode doesn't outweigh the benefits of fast lookup...
+
+# Collisions
+
+There are a few methods to handle collision:
+  - separate chaining: store a linked list in each bucket, causing lookup to be O(N) in the worst case
+      - note: you could also use something like a self-balancing BST, which is apparently what Java8 uses. However, the cost of 
+      balancing might outweigh the benefits of faster worst case lookup 
+  - linear probing: if a key's bucket is already filled by another key, simply look for the closest open bucket.
+      - this requires a good hash function - if bad, then you get clusters of buckets, causing slow insertion times
+
+A good discussion on the benefits to each:
+https://stackoverflow.com/questions/23821764/why-do-we-use-linear-probing-in-hash-tables-when-there-is-separate-chaining-link
+Essentially, linear probing doesn't require new memory allocation (besides resizing), and addresses are typically closer 
+in memory than in chaining. However, chaining is not as sensitive to keys with similar hashcodes. 
+  
+  
+
